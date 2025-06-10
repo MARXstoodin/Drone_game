@@ -10,9 +10,8 @@ public class DroneControler : MonoBehaviour
     public GameObject drone;
     private Vector3 velocity;
     private float force = 0;
-    private float xTurn = 0;
     private float zTurn = 0;
-    private float yTurn = 0;
+    private float forceUp = 0;
 
     void Update()
     {
@@ -28,33 +27,34 @@ public class DroneControler : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            zTurn += 0.01f;
+            zTurn += 0.003f;
         }
         
         if (Input.GetKey(KeyCode.D))
         {
-            zTurn -= 0.01f;
+            zTurn -= 0.003f;
         }
 
         if (Input.GetKey(KeyCode.Space))
         {
-            yTurn += 0.01f;
+            forceUp += 0.01f;
         }
 
         if (Input.GetKey(KeyCode.C))
         {
-            yTurn -= 0.01f;
+            forceUp -= 0.01f;
         }
 
-        force -= math.pow(force, 3) / 204 + force / 204;
-        yTurn -= math.pow(yTurn, 3) / 204 + yTurn / 204;
+        force -= math.pow(force, 3) / drag + force / drag;
+        forceUp -= math.pow(forceUp, 3) / drag + forceUp / drag;
 
-        velocity.x = force * math.cos(zTurn) * math.cos(yTurn);
-        velocity.z = force * math.sin(zTurn) * math.cos(yTurn);
-        velocity.y = force * math.sin(yTurn);
+        velocity.x = force * math.cos(zTurn) * math.sqrt(math.cos(forceUp)-0.06f);
+        velocity.z = force * math.sin(zTurn) * math.sqrt(math.cos(forceUp)-0.06f);
+        velocity.y = forceUp * math.sqrt(math.cos(force)-0.06f);
 
-        print(velocity.x + velocity.y + velocity.z);
+        print((math.abs(velocity.x) + math.abs(velocity.y) + math.abs(velocity.z)) / 3);
 
-        drone.transform.position = velocity;
+        drone.transform.rotation = new Quaternion(0, math.cos(zTurn/2) * Time.deltaTime, 0, math.sin(zTurn/2) * Time.deltaTime);
+        drone.transform.position += velocity * speed * Time.deltaTime;
     }
 }
