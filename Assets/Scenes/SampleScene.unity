@@ -275,6 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2000
   turnSeed: 10
+  camSens: 1
   drone: {fileID: 167337160}
 --- !u!65 &167337162
 BoxCollider:
@@ -583,6 +584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   turnSeed: 0
+  camSens: 0
   drone: {fileID: 647412731}
 --- !u!135 &647412733
 SphereCollider:
