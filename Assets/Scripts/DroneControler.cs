@@ -50,15 +50,15 @@ public class DroneControler : MonoBehaviour
         {
             forceVer = -1;
         }
-/*
+
         if (Input.GetKey(KeyCode.Mouse2))
         {
             cameraLock = 0;
         }
-*/
+
         mousePos = Input.mousePosition - mousePos;
-        mousePos = new Vector3(transform.eulerAngles.x - mousePos.y, transform.eulerAngles.y + mousePos.x, 0);
-        transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, mousePos, 0.2f);
+        mousePos = new Vector3(0, transform.eulerAngles.y + mousePos.x * cameraLock, 0);
+        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, mousePos, 0.15f);
         mousePos = Input.mousePosition;
 
         sin2x = 2 * drone.transform.rotation.y * drone.transform.rotation.w;// 2sinAcosA;  вектор силы по локальной оси x
@@ -73,7 +73,7 @@ public class DroneControler : MonoBehaviour
         velocity.z = force * forceModifier * cos2x + forceHor * forceModifier * sin2x;
         velocity.y = forceVer * forceModifier;
 
-        print(math.sqrt(math.pow(velocity.x, 2) + math.pow(velocity.z, 2) + math.pow(velocity.y, 2)));
+        //print(math.sqrt(math.pow(velocity.x, 2) + math.pow(velocity.z, 2) + math.pow(velocity.y, 2)));
 
         drone.GetComponent<Rigidbody>().AddForce(velocity * speed * Time.deltaTime);
 
